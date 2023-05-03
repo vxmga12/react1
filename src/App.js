@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
 import axios from 'axios'
 import Note from './components/Note'
-import noteService from '/services/notes'
+import noteService from './services/notes'
 
 const App = () => {
   const [notes, setNotes] = useState([])
@@ -11,8 +11,8 @@ const App = () => {
   useEffect(() => {
     noteService
       .getAll()
-      .then(response => {
-        setNotes(response.data)
+      .then(initialNotes => {
+        setNotes(initialNotes)
       })
   }, []) //o segundo parametro com [] significa que so da render 1x
 
@@ -25,8 +25,8 @@ const App = () => {
 
     noteService
       .create(noteObject)
-      .then(response => {
-        setNotes(notes.concat(response.data))
+      .then(returnedNotes => {
+        setNotes(notes.concat(returnedNotes))
         setNewNote('')
       })
     
@@ -47,8 +47,8 @@ const App = () => {
 
     noteService
       .update(id, changedNote)
-      .then(response => {
-        setNotes(notes.map(note => note.id !== id ? note : response.data))
+      .then(returnedNotes => {
+        setNotes(notes.map(note => note.id !== id ? note : returnedNotes))
       })
 
   }
